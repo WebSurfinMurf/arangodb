@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # ArangoDB Database (Backend - isolated on arangodb-net)
+  arangodb:
+    container_name: arangodb
+    image: arangodb/arangodb:3.11
+    restart: unless-stopped
+    env_file:
+      - $HOME/projects/secrets/arangodb.env
+    networks:
+      - arangodb-net
+    volumes:
+      - /home/administrator/projects/data/arangodb:/var/lib/arangodb3
+      - /home/administrator/projects/data/arangodb-apps:/var/lib/arangodb3-apps
+
+  # OAuth2 Proxy (Re-enabled)
+  arangodb-auth-proxy:
+    container_name: arangodb-auth-proxy
+    image: quay.io/oauth2-proxy/oauth2-proxy:latest
+    restart: unless-stopped
+    env_file:
+      - $HOME/projects/secrets/arangodb.env
+    networks:
+      - traefik-net
+      - keycloak-net
+      - arangodb-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.arangodb.rule=Host(`arangodb.ai-servicers.com`)"
+      - "traefik.http.routers.arangodb.entrypoints=websecure"
+      - "traefik.http.routers.arangodb.tls=true"
+      - "traefik.http.routers.arangodb.tls.certresolver=letsencrypt"
+      - "traefik.http.services.arangodb.loadbalancer.server.port=4180"
+    depends_on:
+      - arangodb
+
+networks:
+  arangodb-net:
+    external: true
+  traefik-net:
+    external: true
+  keycloak-net:
+    external: true
