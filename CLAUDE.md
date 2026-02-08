@@ -313,7 +313,7 @@ All resources use the name **arangodb**:
 
 - All secrets stored in `$HOME/projects/secrets/arangodb.env`
 - File permissions: 600 (readable only by owner)
-- Symlink: `$HOME/secrets/arangodb.env` → `$HOME/projects/secrets/arangodb.env`
+- Symlink: `$HOME/projects/secrets/arangodb.env` → `$HOME/projects/secrets/arangodb.env`
 - **Never commit** secrets to git (.gitignore configured)
 
 ### Password Security

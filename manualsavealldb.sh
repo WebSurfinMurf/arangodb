@@ -16,8 +16,8 @@ echo "=== ArangoDB: Forcing WAL flush and sync ==="
 
 # Check if ArangoDB credentials are in secrets file
 ARANGO_ROOT_PASSWORD=""
-if [ -f /home/administrator/secrets/arangodb.env ]; then
-    source /home/administrator/secrets/arangodb.env 2>/dev/null
+if [ -f /home/administrator/projects/secrets/arangodb.env ]; then
+    source /home/administrator/projects/secrets/arangodb.env 2>/dev/null
 fi
 
 # Try alternative variable names
